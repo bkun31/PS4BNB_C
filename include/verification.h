@@ -1,5 +1,5 @@
 /**
- * @file cheater_block.h
+ * @file verification.h
  * @author Bilel, Cedric
  * @brief 
  * @version 0.1
@@ -8,8 +8,10 @@
  * @copyright Domaine public 2021
  * 
  */
-#ifndef CHEATER_BLOCK_H
-#define CHEATER_BLOCK_H
+
+#ifndef VERIFICATION_H
+#define VERIFICATION_H
+
 
 /* ------------ Déclaration Type : ------------ */
 

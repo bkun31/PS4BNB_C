@@ -1,5 +1,5 @@
 /**
- * @file block.h
+ * @file cheater_transaction.h
  * @author Bilel, Cedric
  * @brief 
  * @version 0.1
@@ -11,8 +11,12 @@
 #ifndef CHEATER_TRANSACTION_H
 #define CHEATER_TRANSACTION_H
 
-/* Déclaration Type : */
+/* ------------ Déclaration Type : ------------ */
 
-/* typedef struct xxx xxx; */
+
+/* ------------ Déclaration Constructeur : ------------ */
+
+
+/* ------------ Déclaration Opérateur : ------------ */
 
 #endif
