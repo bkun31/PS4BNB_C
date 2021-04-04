@@ -17,13 +17,6 @@
 #include <stdbool.h>
 
 /**
- *	@defgroup SkipListAT SkipList abstract type
- *  @brief Definition of the SkipList type and operators
- *  by Mathias Paulin (Mathias.Paulin@irit.fr)
- *  Modifié pour les besoins du projet par Bilel, Cédric, Asma
- */
-
-/**
  *	@brief Opaque definition of the SkipList abstract data type.
  */
 typedef struct s_SkipList *SkipList;
