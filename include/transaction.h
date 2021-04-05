@@ -1,54 +1,82 @@
 /**
  * @file transaction.h
- * @author Bilel, Cedric
- * @brief 
- * @version 0.1
+ * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
+ * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
+ * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
+ * @defgroup Transaction Type abstrait Transaction
+ * @brief Définition du type Trransaction et de ses opérateurs
+ * @version 0.2
  * @date 2021-02-25
  * 
  * @copyright Domaine public 2021
- * 
+ * @{
  */
 
 #ifndef TRANSACTION_H
 #define TRANSACTION_H
 
-#include "../include/user.h"
+#include <stdio.h>
+#include "user.h"
+#include "skiplist.h"
 #include "sha256.h"
+#include "queue.h"
+
+#define MAX_VALUE 1000000000 /* Montant max en satoBnb des transactions (10 Bnb) */
+#define MAX_TRANSACTIONS 10  /* Nombre de transactions maximum dans une liste */
+
+#define ERREUR_GENERATION_TRANSACTION 1
+#define ERREUR_CALCUL_MERKLEROOT 2
 
 /* ------------ Déclaration Type : ------------ */
 
-//typedef struct transaction transaction;
-
-/* ------------ Déclaration Constructeur : ------------ */
+/**
+ * @brief Définition type Transaction.
+ * 
+ */
+typedef char *Transaction;
 
 /* ------------ Déclaration Opérateur : ------------ */
 
 /**
- * @brief Génère une transaction sous forme de chaine de caractère.
+ * @brief Génère une transaction sous forme de chaine de caractère. \n
+ * Le format type de la transaction est le suivant : \n
+ * "Source usern-Destination : userm montant_transaction" \n
+ * où montant_transaction est un nombre aléatoire compris entre 1 et MAX_VALUE.
  * 
- * @param usern Utilisateur source
- * @param userm Utilisatuer destiniation
- * @param amt Montant de la transaction 
- * @param str Adresse qui va recevoir la chaine de caractère de la transaction
+ * @param user_source Utilisateur source.
+ * @param user_destination Utilisatuer destiniation.
+ * @return char* Chaine de caractère de la transaction crée.
  */
-void genTx(user *usern, user *userm, int amt, char *str);
+Transaction generate_transaction(User user_source, User user_destination);
+
+/**
+ * @brief Construit une liste de transactions depuis la file globale transactions_queue,
+ * en prenant aléatoirement un nombre de transactions entre 1 et MAX_TRANSACTIONS 10,
+ * si MAX_TRANSACTIONS est inferieur au nombres de transactions dans la file,
+ * sinon tous les l´éléments restants dans la file.
+ * 
+ * @param transactions_queue File de transactions en attente.
+ * @return SkipList 
+ */
+SkipList construct_transaction_list(Queue *transactions_queue);
 
 /**
  * @brief Calcul l'arbre de merkel d'une liste de transaction.
  * 
- * @param pTx Tableau de pointeur de transaction
- * @param nb Nombre de transactions dans le tableau pTx.
- * @param hash Chaîne de caractère qui va contenir la racine de l'arbre (Merkle tree root)
+ * @param transactions_list Liste des transactions.
+ * @param hash Chaîne de caractères d´une taille de 65 octets, qui va contenir le hash code de list_transaction (Merkle Tree Root).
  */
-void genMth(void **pTx, int nb, char hash[SHA256_BLOCK_SIZE * 2 + 1]);
+void calculate_merkleTree(SkipList transactions_list, char hash[SHA256_BLOCK_SIZE * 2 + 1]);
 
 /**
- * @brief Fait la conversion BNB en satoBnb ou inversement (1 Bnb = 10^8 satoBnb).
+ * @brief imprime sur le fichier f la transaction tx.
  * 
- * @param amt Montant à convertir
- * @param mode mode == 0 --> Conversion Bnb en satoBnb \n mode == 1 --> Conversion satoBnb en Bnb
- * @return Retourne l'entier convertit selon le mode choisi.
+ * @param tx Transaction à afficher.
  */
-long int cvrtBnb(int amt, int mode);
+void print_transaction(FILE *f, Transaction tx);
+
+/** @} */
+
+/** @} */
 
 #endif

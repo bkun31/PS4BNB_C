@@ -1,6 +1,9 @@
 /**
  * @file skiplist.h
- * @author Mathias Paulin (Mathias.Paulin@irit.fr), Bilel, Cédric, Asma
+ * @author Mathias Paulin (Mathias.Paulin@irit.fr)
+ * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
+ * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
+ * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
  * @defgroup SkipListAT SkipList abstract type
  * @brief Definition of the SkipList type and operators
  * by Mathias Paulin (Mathias.Paulin@irit.fr)
@@ -8,8 +11,8 @@
  * @version 0.1
  * @date 2021-04-04
  * 
- * @copyright Domaine public 2021
- * 
+ * @copyright Tous droits résérvés à l´auteur original
+ * @{
  */
 
 #ifndef __DESKIPLIST_H__

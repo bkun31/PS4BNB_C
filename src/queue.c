@@ -1,38 +1,39 @@
 /**
- * @file user.c
+ * @file queue.c
  * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
  * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
  * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
  * @brief 
- * @version 0.2
- * @date 2021-02-25
+ * @version 0.1
+ * @date 2021-04-05
  * 
  * @copyright Domaine public 2021
  * 
  */
-
 #include <stdio.h>
-#include <stdlib.h>
-#include "../include/user.h"
+#include <stdbool.h>
 #include "../include/queue.h"
 
 /* ------------------------------------------------------- */
-/* Implémentation structure blockchain*/
+/* Implémentation structure File*/
 
-struct s_User
-{
-};
+typedef struct s_queue Queue;
 
 /* ------------------------------------------------------- */
 
 /* ------------------------------------------------------- */
 /* Constructeur */
 
-User user_create(unsigned int user_num)
+Queue *createQueue()
 {
-    User user;
-    (void)user_num;
-    return user;
+    Queue *q;
+    return q;
+}
+
+Queue *queuePush(Queue *q, void *v)
+{
+    (void)v;
+    return q;
 }
 
 /* ------------------------------------------------------- */
@@ -40,39 +41,40 @@ User user_create(unsigned int user_num)
 /* ------------------------------------------------------- */
 /* Opérateur */
 
-char *user_name(const User user)
+void deleteQueue(ptrQueue *q)
 {
-    char *name;
-    (void)user;
-    return name;
+    (void)q;
 }
 
-satoBnb user_wallet(const User user)
+Queue *queuePop(Queue *q)
 {
-    satoBnb money;
-    (void)user;
-    return money;
+    return q;
 }
 
 
-User user_add_money(User user, satoBnb amount)
+void *queueTop(Queue *q)
 {
-    (void)amount;
-    return user;
+    return (void*)q;
 }
 
 
-User user_sub_money(User user, satoBnb amount)
+bool queueEmpty(Queue *q)
 {
-    (void)amount;
-    return user;
+    (void) q;
+    return true;
 }
 
-User mine(User user, Queue *transactions_queue, satoBnb reward)
+unsigned int queueSize(Queue *q)
 {
-    (void)transactions_queue;
-    (void)reward;
-    return user;
+    (void)q;
+    return 0;
+}
+
+void queueDump(FILE *f, Queue *s, void(*dumpfunction)(FILE *f, void *e))
+{
+    (void)f;
+    (void)s;
+    (void)dumpfunction;
 }
 
 /* ------------------------------------------------------- */

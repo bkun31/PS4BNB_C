@@ -1,6 +1,9 @@
 /**
  * @file skiplist.c
- * @author Bilel, Cédric, Asma
+ * @author Mathias Paulin (Mathias.Paulin@irit.fr)
+ * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
+ * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
+ * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
  * @brief Implantation du TAD SkipList vu en tp de Structure de données, modifié pour les besoins du projet.
  * @version 0.1
  * @date 2021-04-04
