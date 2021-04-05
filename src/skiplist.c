@@ -168,14 +168,26 @@ unsigned int skiplist_size(SkipList d)
 	return d->size;
 }
 
-int skiplist_ith(SkipList d, unsigned int i)
+void *skiplist_ith(SkipList d, unsigned int key)
 {
-	assert(d->size && i < d->size);
-	Node *at = d->sentinel->next[0];
-	while (i--)
-		at = at->next[0];
+	assert(d->size);
+	Node *at = d->sentinel;
+	unsigned int level = d->nblevels;
+	while (level--)
+	{
 
-	return at->key;
+		while (at->next[level] != d->sentinel && at->next[level]->key < key)
+		{
+			at = at->next[level];
+		}
+
+		if (at->next[level] != d->sentinel && at->next[level]->key == key)
+		{
+			return at->next[level]->elem;
+		}
+	}
+
+	return NULL;
 }
 
 void skiplist_map(SkipList d, ScanOperator f, void *user_data)

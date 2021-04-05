@@ -17,13 +17,6 @@
 #include <stdbool.h>
 
 /**
- *	@defgroup SkipListAT SkipList abstract type
- *  @brief Definition of the SkipList type and operators
- *  by Mathias Paulin (Mathias.Paulin@irit.fr)
- *  Modifié pour les besoins du projet par Bilel, Cédric, Asma
- */
-
-/**
  *	@brief Opaque definition of the SkipList abstract data type.
  */
 typedef struct s_SkipList *SkipList;
@@ -58,6 +51,7 @@ SkipList skiplist_create(int nblevels);
  *	skiplist_delete : SkipList\f$\rightarrow \f$ void.
  * @endparblock
  *	@param d the skiplist to delete.
+ *  @param f the memory free operator
  *
  */
 void skiplist_delete(SkipList d, FreeOperator f);
@@ -88,8 +82,8 @@ unsigned int skiplist_size(SkipList d);
  *	skiplist_ith : SkipList \f$\times\f$ unsigned int \f$\rightarrow\f$ int
  * @endparblock
  *	@param d the SkipList to access
- *	@param i the index of the required value
- *  @return the number of elements in the SkipList.
+ *	@param key the key of the required element
+ *  @return the element associated with the key else NULL
  * @pre
  *	0 \f$\le\f$  i \f$<\f$  skiplist_size(d)
  * @par Axioms
@@ -97,13 +91,14 @@ unsigned int skiplist_size(SkipList d);
  * (skiplist_ith(d, i) = x) \f$\wedge\f$ ( (\f$\nu\f$ y : ( (skiplist_search(d, y) = true) \f$\wedge\f$  (y \f$\le\f$ x) )) = i ) 
  * @endparblock
  */
-int skiplist_ith(SkipList d, unsigned int i);
+void *skiplist_ith(SkipList d, unsigned int key);
 
 /**
  *	@brief Insert the value v in the skip list d.
  
  *	@param d the SkipList to search into
- *	@param value the value to search for
+ *	@param key the key to search for
+ *  @param elem the element to insert at skiplist
  *  @return the eventually modified skiplist.
  *
  *  @invariant The list is always ordered by ascending order
@@ -117,7 +112,8 @@ SkipList skiplist_insert(SkipList d, int key, void *elem);
  *	@brief Remove the value v from the skip list d.
  
  *	@param d the SkipList to remove from
- *	@param value the value to remove
+ *	@param key the value to remove
+ *  @param f the memory free operator
  *  @return the eventually modified skiplist.
  *
  *  @invariant The list is always ordered by ascending order
