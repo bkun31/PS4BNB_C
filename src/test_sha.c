@@ -3,9 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "sha256.h"
-#include "sha256_utils.h"
-#define STRLONG 30
+#include "../include/sha256.h"
+#include "../include/sha256_utils.h"
+#define STRLONG 55
 
 int main(){
 	int bufferSize = SHA256_BLOCK_SIZE;
