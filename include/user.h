@@ -7,7 +7,7 @@
  * @brief Définition du type User et de ses opérateurs
  * @version 0.2
  * @date 2021-02-25
- * 
+ *
  * @copyright Domaine public 2021
  * @{
  */
@@ -16,6 +16,7 @@
 #define USER_H
 
 #include "bnb.h"
+#include "queue.h"
 
 #define ERREUR_ALLOCATION_USER 1
 
@@ -27,7 +28,7 @@ typedef struct s_User *User;
 
 /**
  * @brief Crée l'utilisateur numéro user_num.
- * 
+ *
  * @param user_num Numéro de l´utilisateur, si user_num = 0, l´utilisateur crée est "Créator", sinon l´utilisateur crée est "usern__user_num__".
  */
 User user_create(unsigned int user_num);
@@ -36,21 +37,21 @@ User user_create(unsigned int user_num);
 
 /**
  * @brief Renvoie le nom de l'utilisateur.
- * 
+ *
  * @param user Utilisateur dont on veut récupérer le nom.
  */
 char *user_name(const User user);
 
 /**
  * @brief Renvoie la somme de bnb que possède l'utilisateur user.
- * 
+ *
  * @param user Utilisateur dont on veut récupérer la somme d'argent qu'il possède.
  */
 satoBnb user_wallet(const User user);
 
 /**
  * @brief Ajoute amount satoBnb au portefeuille de l´utilisateur.
- * 
+ *
  * @param user Utilisateur.
  * @param amount Montant à ajouter.
  * @return L´utilisateur avec son portefeuille actualisé.
@@ -72,7 +73,7 @@ User user_sub_money(User user, satoBnb amount);
  * si MAX_TRANSACTIONS est inferieur aux nombres de transaction contenue dans la file, sinon [1, queueSize(transactions_queue)]. \n
  * Les transactions sont ensuite mis dans une liste pour enfin créer et miner un nouveau bloc. \n
  * Recalcule la nouvelle récompense quand un certains de nombres de blocs ont étaient miné.
- * 
+ *
  * @param user Utilisateur qui va créer et miner le nouveau bloc.
  * @param transactions_queue File de transactions en attentes.
  * @param reward Récompense pour les mineurs en phase d´inflations
