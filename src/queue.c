@@ -1,23 +1,46 @@
 /**
  * @file queue.c
- * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
- * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
- * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
- * @brief 
+ * @author Mathias Paulin (Mathias.Paulin@irit.fr)
+ * @brief Implémentation du TAD QUEUE
  * @version 0.1
  * @date 2021-04-05
  * 
- * @copyright Domaine public 2021
+ * @copyright Tous les droits réservés à son auteur 2021
  * 
  */
+
+/*-----------------------------------------------------------------*/
+/*
+ Licence Informatique - Structures de données
+ Mathias Paulin (Mathias.Paulin@irit.fr)
+ 
+ Implantation du TAD Queue étudié en cours.
+ 
+ */
+/*-----------------------------------------------------------------*/
+
 #include <stdio.h>
 #include <stdbool.h>
+#include <assert.h>
+#include <stdlib.h>
 #include "../include/queue.h"
 
 /* ------------------------------------------------------- */
 /* Implémentation structure File*/
 
-typedef struct s_queue Queue;
+/* Full definition of the queue structure */
+typedef struct s_internalQueue
+{
+    void *value;
+    struct s_internalQueue *next;
+} InternalQueue;
+
+struct s_queue
+{
+    InternalQueue *head;
+    InternalQueue *tail;
+    unsigned int size;
+};
 
 /* ------------------------------------------------------- */
 
@@ -26,14 +49,22 @@ typedef struct s_queue Queue;
 
 Queue *createQueue()
 {
-    Queue *q;
-    return q;
+    Queue *q = malloc(sizeof(Queue));
+    q->head = q->tail = NULL;
+    q->size = 0;
+    return (q);
 }
 
 Queue *queuePush(Queue *q, void *v)
 {
-    (void)v;
-    return q;
+    InternalQueue **insert_at = (q->size ? &(q->tail->next) : &(q->head));
+    InternalQueue *new = malloc(sizeof(InternalQueue));
+    new->value = v;
+    new->next = NULL;
+    *insert_at = new;
+    q->tail = new;
+    ++(q->size);
+    return (q);
 }
 
 /* ------------------------------------------------------- */
@@ -43,38 +74,48 @@ Queue *queuePush(Queue *q, void *v)
 
 void deleteQueue(ptrQueue *q)
 {
-    (void)q;
+    InternalQueue *toDelete = (*q)->head;
+    while (toDelete)
+    {
+        InternalQueue *f = toDelete;
+        toDelete = toDelete->next;
+        free(f);
+    }
+    free(*q);
+    *q = NULL;
 }
 
 Queue *queuePop(Queue *q)
 {
-    return q;
+    assert(!queueEmpty(q));
+    InternalQueue *old = q->head;
+    q->head = q->head->next;
+    q->size--;
+    free(old);
+    return (q);
 }
-
 
 void *queueTop(Queue *q)
 {
-    return (void*)q;
+    assert(!queueEmpty(q));
+    return (q->head->value);
 }
-
 
 bool queueEmpty(Queue *q)
 {
-    (void) q;
-    return true;
+    return (q->size == 0);
 }
 
 unsigned int queueSize(Queue *q)
 {
-    (void)q;
-    return 0;
+    return q->size;
 }
 
-void queueDump(FILE *f, Queue *s, void(*dumpfunction)(FILE *f, void *e))
+void queueDump(FILE *f, Queue *q, void (*dumpfunction)(FILE *f, void *e))
 {
-    (void)f;
-    (void)s;
-    (void)dumpfunction;
+    fprintf(f, "(%d) --  ", q->size);
+    for (InternalQueue *c = q->head; c != NULL; c = c->next)
+        dumpfunction(f, c->value);
 }
 
 /* ------------------------------------------------------- */
