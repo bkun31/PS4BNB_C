@@ -179,12 +179,12 @@ void *skiplist_ith(SkipList d, unsigned int key)
 	while (level--)
 	{
 
-		while (at->next[level] != d->sentinel && at->next[level]->key < key)
+		while (at->next[level] != d->sentinel && at->next[level]->key < (int)key)
 		{
 			at = at->next[level];
 		}
 
-		if (at->next[level] != d->sentinel && at->next[level]->key == key)
+		if (at->next[level] != d->sentinel && at->next[level]->key == (int)key)
 		{
 			return at->next[level]->elem;
 		}
