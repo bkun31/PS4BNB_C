@@ -1,3 +1,4 @@
+//typedef int make_iso_compilers_happy;
 /**
  * @file user.c
  * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
@@ -14,13 +15,18 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "../include/user.h"
-#include "../include/queue.h"
+
+#define USER_NAME_SIZE 8
+
+char *name_create(char *user_name, unsigned int user_num);
 
 /* ------------------------------------------------------- */
-/* Implémentation structure blockchain*/
+/* Implémentation structure user */
 
 struct s_User
 {
+    char name[USER_NAME_SIZE];
+    satoBnb wallet;
 };
 
 /* ------------------------------------------------------- */
@@ -30,49 +36,63 @@ struct s_User
 
 User user_create(unsigned int user_num)
 {
-    User user;
-    (void)user_num;
+    User user = malloc(sizeof(struct s_User));
+    if (user == NULL)
+    {
+        perror("\nALLOCATION USER ERROR\n");
+        exit(ERREUR_ALLOCATION_USER);
+    }
+    name_create(user->name, user_num);
+    user->wallet = 0;
+
     return user;
 }
-
 /* ------------------------------------------------------- */
 
 /* ------------------------------------------------------- */
 /* Opérateur */
 
-char *user_name(const User user)
+/* Crée le nom de l´utilisateur en fonction de son numéro */
+char *name_create(char *user_name, unsigned int user_num)
 {
-    char *name;
-    (void)user;
-    return name;
+    if (user_num)
+    {
+        sprintf(user_name, "user%d", user_num);
+    }
+    else
+    {
+        sprintf(user_name, "Creator");
+    }
+
+    return user_name;
 }
 
-satoBnb user_wallet(const User user)
+const char *user_name(const User user)
 {
-    satoBnb money;
-    (void)user;
-    return money;
+    return user->name;
 }
 
+const satoBnb user_wallet(const User user)
+{
+    return user->wallet;
+}
 
 User user_add_money(User user, satoBnb amount)
 {
-    (void)amount;
+    user->wallet += amount;
     return user;
 }
-
 
 User user_sub_money(User user, satoBnb amount)
 {
-    (void)amount;
+    user->wallet -= amount;
     return user;
 }
 
-User mine(User user, Queue *transactions_queue, satoBnb reward)
+void user_delete(User *user)
 {
-    (void)transactions_queue;
-    (void)reward;
-    return user;
+    free(*user);
+    *user = NULL;
 }
 
 /* ------------------------------------------------------- */

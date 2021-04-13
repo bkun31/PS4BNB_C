@@ -16,7 +16,6 @@
 #define USER_H
 
 #include "bnb.h"
-#include "queue.h"
 
 #define ERREUR_ALLOCATION_USER 1
 
@@ -40,14 +39,14 @@ User user_create(unsigned int user_num);
  *
  * @param user Utilisateur dont on veut récupérer le nom.
  */
-char *user_name(const User user);
+const char *user_name(const User user);
 
 /**
  * @brief Renvoie la somme de bnb que possède l'utilisateur user.
  *
  * @param user Utilisateur dont on veut récupérer la somme d'argent qu'il possède.
  */
-satoBnb user_wallet(const User user);
+const satoBnb user_wallet(const User user);
 
 /**
  * @brief Ajoute amount satoBnb au portefeuille de l´utilisateur.
@@ -68,18 +67,11 @@ User user_add_money(User user, satoBnb amount);
 User user_sub_money(User user, satoBnb amount);
 
 /**
- * @brief Fait miner un bloc à un utilisateur et lui donne une récompense si elle est non nul. \n
- * La fonction choisit aléatoirement un nombre de transactions dans la file transactions_queue dans l´intervalle [1, MAX_TRANSACTIONS],
- * si MAX_TRANSACTIONS est inferieur aux nombres de transaction contenue dans la file, sinon [1, queueSize(transactions_queue)]. \n
- * Les transactions sont ensuite mis dans une liste pour enfin créer et miner un nouveau bloc. \n
- * Recalcule la nouvelle récompense quand un certains de nombres de blocs ont étaient miné.
- *
- * @param user Utilisateur qui va créer et miner le nouveau bloc.
- * @param transactions_queue File de transactions en attentes.
- * @param reward Récompense pour les mineurs en phase d´inflations
- * @return User Utilisateur ayant miné le bloc correctement.
+ * @brief Libère en mémoire et supprime l´utilisateur user.
+ * 
+ * @param user Utilisateur à supprimer.
  */
-User mine(User user, Queue *transactions_queue, satoBnb reward);
+void user_delete(User *user);
 
 /** @} */
 
