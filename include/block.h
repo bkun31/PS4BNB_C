@@ -19,6 +19,7 @@
 #include <stdbool.h>
 #include <time.h>
 #include "sha256.h"
+#include "../include/skiplist.h"
 
 #define AUCUNE_ERREUR 0
 #define ERREUR_ALLOCATION_BLOCk 1
@@ -31,37 +32,18 @@
  */
 typedef struct s_Block *Block;
 
-/**
- * @brief Opérateur qui renvoie la taille de la donnée du bloc.
- * 
- */
-typedef unsigned int (*SizeOperator)(void*);
-
-/**
- * @brief Opérateur qui calcul le hash de la donnée.
- * 
- */
-typedef void (*CalculateHashData)(void*, char*);
-
-/**
- * @brief Opérateur qui imprime les données dans un fichier.
- * 
- */
-typedef void (*DataDumpOperator)(FILE*, void*);
-
 /* ------------ Déclaration Constructeur : ------------ */
 
 /**
  * @brief Construit un bloc.
  * 
- * @param previous_hash Hash du bloc précédent.
  * @param index Numéro du bloc.
- * @param data Donnée à mettre dans le bloc.
- * @param f Fonction qui renvoie la taille de la donnée data.
- * @return Un bloc correctement crée.
+ * @param transactions Liste de transactions à mettre dans le bloc.
+ * @param merkle_tree Arbre de merkle de la liste des transactions.
+ * @param previous_hash Hash du bloc précédent (bloc d'indice index - 1).
+ * @return Un bloc correctement crée sans minage.
  */
-Block block_create(char previous_hash[SHA256_BLOCK_SIZE * 2 + 1], int index, void *data, SizeOperator f);
-
+Block block_create(unsigned int index, SkipList transactions, char merkle_tree[SHA256_BLOCK_SIZE * 2 + 1], char previous_hash[SHA256_BLOCK_SIZE * 2 + 1]);
 
 /* ------------ Déclaration Opérateur : ------------ */
 
@@ -85,35 +67,33 @@ unsigned int block_nonce(const Block blk);
  * @brief Recupère le hash du bloc blk.
  * 
  * @param blk Bloc dont il faut récupérer le hash.
- * @param hash Chaîne de caractères d´une taille de 65 octets qui va contenir le hash.
- * @return Le hash du bloc blk.
+ * @return char* Le hash du bloc blk d´une taille de 65 octets (caractère de fin de chaîne inclus).
  */
-void block_hash(const Block blk, char hash[SHA256_BLOCK_SIZE*2+1]);
+const char *block_hash(const Block blk);
 
 /**
  * @brief Recupère le hash du bloc précédent de blk.
  * 
  * @param blk Bloc dont il faut récupérer le hash de son précédent.
- * @param hash Chaîne de caractères d´une taille de 65 octets qui va contenir le hash.
- * @return Le hash du bloc blk.
+ * @return char* Le hash du bloc précédent blk d´une taille de 65 octets (caractère de fin de chaîne inclus).
  */
-void block_prevhash(const Block blk, char hash[SHA256_BLOCK_SIZE*2+1]);
+const char *block_prevhash(const Block blk);
 
 /**
- * @brief Récupère le hash code du merkle tree root contenu dans le bloc blk.
+ * @brief Récupère l'arbre de merkle de la liste de transactions contenue dans le bloc blk.
  * 
- * @param blk Bloc dont il faut récupérer le hash code merkle tree root.
- * @param hash Chaîne de caractères d´une taille de 65 octets qui va contenir le hash.
+ * @param blk Bloc de transactions dont il faut récupérer l'arbre de merkle.
+ * @return char* L'arbre de merkle de la liste des transaction du bloc blk d´une taille de 65 octets (caractère de fin de chaîne inclus).
  */
-void block_merkleTree(const Block blk, char hash[SHA256_BLOCK_SIZE*2+1]);
+const char *block_merkle_tree(const Block blk);
 
 /**
- * @brief Récupère les données contenue dans le bloc blk.
+ * @brief Récupère la liste des transactions contenue dans le bloc blk.
  * 
- * @param blk Bloc.
- * @return Les données contenue dans le bloc.
+ * @param blk Bloc de transactions.
+ * @return SkipList* La liste des transactions contenue dans le bloc blk.
  */
-void *block_data(Block blk);
+SkipList block_transactions(const Block blk);
 
 /**
  * @brief Récupère la date de création du bloc en nombre de secondes écoulées depuis le 01/01/1970 à 00:00:00 UTC jusqu´à la création du bloc.
@@ -124,21 +104,21 @@ void *block_data(Block blk);
 time_t block_timestamp(const Block blk);
 
 /**
- * @brief Récupère la taille de la donnée contenue dans le bloc.
+ * @brief Renvoie le nombre de transactions du bloc blk.
  * 
- * @param blk Bloc dont il faut récupérer la taille de la donnée.
- * @return unsigned int Taille de la donnée dans le bloc.
+ * @param blk Bloc de transactions.
+ * @return unsigned int Nombre de transactions contenue dans le bloc blk.
  */
-unsigned int block_datasize(const Block blk);
+unsigned int block_tx_count(const Block blk);
 
 /**
  * @brief Calcule le hash du bloc blk.
  * 
  * @param blk Bloc à calculer.
- * @param hash Chaîne de caractères d´une taille de 65 octets qui va contenir le hash.
- * @return char* Le hash du bloc correspondant à son contenu.
+ * @param hash Chaîne de caractères d´une taille de 65 octets (caractère de fin de chaîne inclus) qui va contenir le hash.
+ * @return char* Le pointeur vers la chaîne de caractères hash du bloc correspondant à son contenu.
  */
-void calculate_hash_block(Block blk, char hash[SHA256_BLOCK_SIZE*2+1]);
+char *calculate_hash_block(Block blk, char hash[SHA256_BLOCK_SIZE*2+1]);
 
 /**
  * @brief Algorithme de consensus. \n
@@ -149,7 +129,7 @@ void calculate_hash_block(Block blk, char hash[SHA256_BLOCK_SIZE*2+1]);
  * @param difficulty Difficulté de minage.
  * @return true Si le block a correctement était miné.
  */
-bool proof_of_Work(Block blk, unsigned int difficulty);
+bool proof_of_work(Block blk, unsigned int difficulty);
 
 /**
  * @brief Imprime dans le fichier f, le contenu du bloc blk. \n
@@ -166,9 +146,8 @@ bool proof_of_Work(Block blk, unsigned int difficulty);
  * 
  * @param f Fichier de sortie.
  * @param blk Bloc à imprimer.
- * @param d Fonction d´impression de données contenue dans le bloc.
  */
-void block_dump(FILE *f, const Block blk, DataDumpOperator d);
+void block_dump(FILE *f, const Block blk);
 
 /** @} */
 
