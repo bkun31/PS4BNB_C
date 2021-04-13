@@ -1,0 +1,11 @@
+10
+Source user1-Destination : user2 100000000
+Source Creator-Destination : user5 3405050
+Source user3-Destination : user2 203823
+Source user1-Destination : user4 3044401
+Source user5-Destination : user1 12330
+Source user4-Destination : user2 73934
+Source user2-Destination : Creator 9058372
+Source user3-Destination : Creator 8992374
+Source user2-Destination : user5 4229480
+Source user5-Destination : Creator 1220
