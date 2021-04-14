@@ -46,7 +46,7 @@ const char *user_name(const User user);
  *
  * @param user Utilisateur dont on veut récupérer la somme d'argent qu'il possède.
  */
-const satoBnb user_wallet(const User user);
+satoBnb user_wallet(const User user);
 
 /**
  * @brief Ajoute amount satoBnb au portefeuille de l´utilisateur.

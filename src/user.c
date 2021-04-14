@@ -72,7 +72,7 @@ const char *user_name(const User user)
     return user->name;
 }
 
-const satoBnb user_wallet(const User user)
+satoBnb user_wallet(const User user)
 {
     return user->wallet;
 }
