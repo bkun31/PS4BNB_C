@@ -25,7 +25,7 @@
  * @brief Définition type Bnb.
  * 
  */
-typedef float Bnb;
+typedef double Bnb;
 
 /**
  * @brief Définition type satoBnb. \n

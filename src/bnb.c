@@ -18,16 +18,12 @@
 
 satoBnb bnb_to_satobnb(Bnb amount)
 {
-    satoBnb convert;
-    (void)amount;
-    return convert;
+    return CONVERT_BNB_TO_SATOBNB(amount);
 }
 
 Bnb satobnb_to_bnb(satoBnb amount)
 {
-    Bnb convert;
-    (void)amount;
-    return convert;
+    return CONVERT_SATOBNB_TO_BNB(amount);
 }
 
 

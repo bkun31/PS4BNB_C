@@ -43,4 +43,6 @@ int main()
 
     user_delete(&usr0);
     user_delete(&usr5);
+
+    return 0;
 }

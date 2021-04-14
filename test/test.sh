@@ -81,7 +81,7 @@ else
         ./test_transaction
 
     elif [ "4" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/user.c ../src/bnb.c ../src/queue.c user-tests/test_user.c -o user-tests/test_user
+        gcc -Wall -Werror -std=c99 -g ../src/user.c ../src/bnb.c ../src/queue.c user-tests/test_user.c -o user-tests/test_user
         cd user-tests/
 
         echo "Run test_user"
@@ -89,7 +89,7 @@ else
         ./test_user
 
     elif [ "5" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/bnb.c bnb-tests/test_bnb.c -o bnb-tests/test_bnb
+        gcc -Wall -Werror -std=c99 -g ../src/bnb.c bnb-tests/test_bnb.c -o bnb-tests/test_bnb
         cd bnb-tests/
 
         echo "Run test_bnb"
