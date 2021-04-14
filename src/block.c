@@ -45,7 +45,7 @@ struct s_Block
 * Constructeur *
 ****************/
 
-Block block_create(unsigned int index, SkipList transactions, char merkle_tree[SHA256_BLOCK_SIZE * 2 + 1], char previous_hash[SHA256_BLOCK_SIZE * 2 + 1])
+Block block_create(unsigned int index, SkipList transactions, char previous_hash[SHA256_BLOCK_SIZE * 2 + 1])
 {
     Block blk = malloc(sizeof(struct s_Block));
     if (blk == NULL)
@@ -58,8 +58,8 @@ Block block_create(unsigned int index, SkipList transactions, char merkle_tree[S
     blk->nonce = 0;
     blk->transactions = transactions;
     blk->tx_count = skiplist_size(transactions);
-    strcpy(blk->merkle_tree, merkle_tree);
     strcpy(blk->previous_hash, previous_hash);
+    calculate_merkleTree(transactions, blk->merkle_tree);
     calculate_hash_block(blk, blk->hash);
 
     return blk;

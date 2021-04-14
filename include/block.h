@@ -35,15 +35,16 @@ typedef struct s_Block *Block;
 /* ------------ Déclaration Constructeur : ------------ */
 
 /**
- * @brief Construit un bloc.
+ * @brief Construit un bloc. \n
+ * Calcul l´arbre de merkle de la liste de transactions passée en paramètre
+ * et calcul le hash du bloc sans respecté de difficulté (pas de minage).
  * 
  * @param index Numéro du bloc.
  * @param transactions Liste de transactions à mettre dans le bloc.
- * @param merkle_tree Arbre de merkle de la liste des transactions.
  * @param previous_hash Hash du bloc précédent (bloc d'indice index - 1).
  * @return Un bloc correctement crée sans minage.
  */
-Block block_create(unsigned int index, SkipList transactions, char merkle_tree[SHA256_BLOCK_SIZE * 2 + 1], char previous_hash[SHA256_BLOCK_SIZE * 2 + 1]);
+Block block_create(unsigned int index, SkipList transactions, char previous_hash[SHA256_BLOCK_SIZE * 2 + 1]);
 
 /* ------------ Déclaration Opérateur : ------------ */
 
