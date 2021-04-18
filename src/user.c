@@ -21,15 +21,6 @@
 char *name_create(char *user_name, unsigned int user_num);
 
 /* ------------------------------------------------------- */
-/* Implémentation structure user */
-
-struct s_User
-{
-    char name[USER_NAME_SIZE];
-    satoBnb wallet;
-};
-
-/* ------------------------------------------------------- */
 
 /* ------------------------------------------------------- */
 /* Constructeur */

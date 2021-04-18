@@ -1,5 +1,5 @@
-
-#ifndef CHEATER_BLOCK_H #define CHEATER_BLOCK_H 
+#ifndef CHEATER_BLOCK_H 
+#define CHEATER_BLOCK_H 
 /* ------------ Déclaration Type : ------------ /
 
 / ------------ Déclaration Constructeur : ------------ /
@@ -17,11 +17,12 @@
 void cheaterSuppressionBloc(int index, blockchain *bc);
 
  
-/ * @brief modifie l'index et l'adresse des blocs suivants une fois le bloc saisi supprimé afin de ne laisser aucune trace 
+/* @brief modifie l'index et l'adresse des blocs suivants une fois le bloc saisi supprimé afin de ne laisser aucune trace 
   *
   * @param block *pblk adresse du bloc suivant contenue dans le bloc n+1 que l'on va ajouter au nouveau bloc n 
   * @param int index l'index qu'on va incrémenter de 1 à chaque fois à partir du dernier bloc 
   * @return */
+  
 int cheaterAdresseIndex(block *pblk, int index);
 /*
   * 
@@ -30,4 +31,5 @@ int cheaterAdresseIndex(block *pblk, int index);
   * @return */
 
 char[] cheaterRecalcul(char hash[SHA256_BLOCK_SIZE2+1]);
+
 #endif

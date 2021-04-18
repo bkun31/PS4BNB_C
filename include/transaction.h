@@ -50,15 +50,15 @@ typedef char *Transaction;
 Transaction generate_transaction(User user_source, User user_destination);
 
 /**
- * @brief Construit une liste de transactions depuis la file globale transactions_queue,
+ * @brief Construit une file  de transactions depuis la file globale transactions_queue,
  * en prenant aléatoirement un nombre de transactions entre 1 et MAX_TRANSACTIONS 10,
  * si MAX_TRANSACTIONS est inferieur au nombres de transactions dans la file,
  * sinon tous les l´éléments restants dans la file.
  * 
  * @param transactions_queue File de transactions en attente.
- * @return SkipList 
+ * @return Queue 
  */
-SkipList construct_transaction_list(Queue *transactions_queue);
+Queue * construct_transaction_list(Queue *transactions_queue);
 
 /**
  * @brief Calcul l'arbre de merkel d'une liste de transaction.
@@ -66,7 +66,7 @@ SkipList construct_transaction_list(Queue *transactions_queue);
  * @param transactions_list Liste des transactions.
  * @param hash Chaîne de caractères d´une taille de 65 octets, qui va contenir le hash code de list_transaction (Merkle Tree Root).
  */
-void calculate_merkleTree(SkipList transactions_list, char hash[SHA256_BLOCK_SIZE * 2 + 1]);
+void calculate_merkleTree(Queue * transactions_list, char merkleRoot[SHA256_BLOCK_SIZE * 2 + 1]);
 
 /**
  * @brief imprime sur le fichier f la transaction tx.
@@ -78,5 +78,7 @@ void print_transaction(FILE *f, Transaction tx);
 /** @} */
 
 /** @} */
+
+char * strAlloc(char * strToCopy, int stringLen);
 
 #endif

@@ -1,4 +1,4 @@
-/**
+//**
  * @file queue.h
  * @author Mathias Paulin (Mathias.Paulin@irit.fr)
  * @defgroup QueueAT Queue abstract type
@@ -33,13 +33,13 @@ void deleteQueue(ptrQueue *q);
 	queue_push : Queue x int -> Queue
 	@note : side effect on the queue q
 */
-Queue *queuePush(Queue *q, void *v);
+void queuePush(Queue *q, void *v);
 
 /** Operator : pop an element from the queue 
 	queue_pop : Queue -> Queue
 	@pre !queue_empty(q)
 */
-Queue *queuePop(Queue *q);
+void *queuePop(Queue *q);
 
 /** Operator : acces to the frist element of the queue
 	queue_top : Queue -> int
@@ -59,6 +59,8 @@ unsigned int queueSize(Queue *q);
 
 /** Dump the queue (print it) on the given FILE*
  */
+//void queueDump(FILE *f, Queue *s, void(*dumpfunction)(FILE *f, void *e));
+
 void queueDump(FILE *f, Queue *s, void(*dumpfunction)(FILE *f, void *e));
 
 /** @} */

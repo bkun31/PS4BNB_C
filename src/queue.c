@@ -55,7 +55,7 @@ Queue *createQueue()
     return (q);
 }
 
-Queue *queuePush(Queue *q, void *v)
+void queuePush(Queue *q, void * v)
 {
     InternalQueue **insert_at = (q->size ? &(q->tail->next) : &(q->head));
     InternalQueue *new = malloc(sizeof(InternalQueue));
@@ -64,7 +64,6 @@ Queue *queuePush(Queue *q, void *v)
     *insert_at = new;
     q->tail = new;
     ++(q->size);
-    return (q);
 }
 
 /* ------------------------------------------------------- */
@@ -85,17 +84,18 @@ void deleteQueue(ptrQueue *q)
     *q = NULL;
 }
 
-Queue *queuePop(Queue *q)
+void * queuePop(Queue *q)
 {
     assert(!queueEmpty(q));
+    void * value = q->head->value;
     InternalQueue *old = q->head;
     q->head = q->head->next;
     q->size--;
     free(old);
-    return (q);
+    return value;
 }
 
-void *queueTop(Queue *q)
+void * queueTop(Queue *q)
 {
     assert(!queueEmpty(q));
     return (q->head->value);
@@ -117,5 +117,4 @@ void queueDump(FILE *f, Queue *q, void (*dumpfunction)(FILE *f, void *e))
     for (InternalQueue *c = q->head; c != NULL; c = c->next)
         dumpfunction(f, c->value);
 }
-
 /* ------------------------------------------------------- */
