@@ -70,7 +70,6 @@ int main()
     {
         SkipList sl_tx = skiplist_create(4);
         Block blk;
-        char merkleT[SHA256_BLOCK_SIZE * 2 + 1];
         char prevhash[SHA256_BLOCK_SIZE * 2 + 1];
         int tx_count;
 
@@ -85,11 +84,10 @@ int main()
         }
 
         /* on va créer le bloc on récupère deux hash pour simuler le merkle tree et le hash du bloc précédent */
-        fscanf(f_hash, "%s", merkleT);
         fscanf(f_hash, "%s", prevhash);
 
         printf("Creation bloc et affichage des informations du bloc  avant minage, avec les getters.\n\n");
-        blk = block_create(2, sl_tx, merkleT, prevhash);
+        blk = block_create(2, sl_tx, prevhash);
         printf("index : %d\n" /* on regarde que chaque getters fonctionne et que les informations sont cohérentes (bloc bien construit) */
                "nonce : %d\n"
                "hash : %s\n"

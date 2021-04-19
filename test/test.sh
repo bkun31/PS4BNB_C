@@ -57,7 +57,7 @@ if [ $# -eq 0 ]; then
 
 else
     if [ "1" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/block.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c block-tests/test_block.c -o block-tests/test_block
+        gcc -Wall -Werror -std=c99 ../src/block.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c ../src/transaction.c ../src/queue.c block-tests/test_block.c -o block-tests/test_block
         cd block-tests/
 
         echo "Run test_block"
@@ -73,7 +73,7 @@ else
         ./test_blockchain
 
     elif [ "3" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/transaction.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c transaction-tests/test_transaction.c -o transaction-tests/test_transaction
+        gcc -Wall -Werror -std=c99 ../src/transaction.c ../src/user.c -g ../src/queue.c ../src/skiplist.c ../src/rng.c transaction-tests/test_transaction.c ../src/sha256_utils.c ../src/sha256.c -o transaction-tests/test_transaction
         cd transaction-tests/
 
         echo "Run test_transaction"
