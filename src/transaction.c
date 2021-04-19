@@ -17,8 +17,10 @@
 #include <string.h>
 #include "../include/transaction.h"
 #include "../include/user.h"
-#include "../include/sha256_utils.h"
 #include "../include/queue.h"
+#include "../include/skiplist.h"
+#include "../include/sha256.h"
+#include "../include/sha256_utils.h"
 
 /* ------------------------------------------------------- */
 /* Opérateur */
@@ -49,7 +51,7 @@ Transaction generate_transaction(User user_source, User user_destination)
 	return transaction;
 }
 
-Queue * construct_transaction_list(Queue * transactions_queue)
+SkipList construct_transaction_list(Queue * transactions_queue)
 {
 	/*On vérifie si MAX_TRANSACTIONS est inférieur au nombre d'éléments de la file (besoin de connaître la taille de la file)
 	 * (besoin d'accéder à la file pour récupérer les transacitons, normalement avec pop)
@@ -57,8 +59,7 @@ Queue * construct_transaction_list(Queue * transactions_queue)
 	 * (besoin de générer un nombre aléatoire)
 	 * SI NON : on prend toutes les transactions restantes
 	 */
-	 srand(time(NULL));
-	 Queue * transactions_list = createQueue();
+	 SkipList transactions_list = skiplist_create(4);
 
 	 if (MAX_TRANSACTIONS < queueSize(transactions_queue))
 	 {
@@ -66,7 +67,7 @@ Queue * construct_transaction_list(Queue * transactions_queue)
 		 for (int i=0; i<nbAleatoireTransactions; i++)
 		 {
 			 Transaction transaction=strAlloc(queuePop(transactions_queue), 100);
-			 queuePush(transactions_list, transaction);
+			 skiplist_insert(transactions_list, i, transaction);
 		 }
      }
      else 
@@ -74,20 +75,28 @@ Queue * construct_transaction_list(Queue * transactions_queue)
 		 while (queueSize(transactions_queue) > 0) 
 		 {
 			 Transaction transaction=strAlloc(queuePop(transactions_queue), 100);
-			 queuePush(transactions_list, transaction);
+			 skiplist_insert(transactions_list, queueSize(transactions_queue), transaction);
 		 }
 	 }	 
 	 return transactions_list;
 }
 
-void calculate_merkleTree(Queue * transactions_list, char merkleRoot[SHA256_BLOCK_SIZE * 2 + 1])
+void skiplist_to_queue(void *transaction, void *queue)
 {
+	queuePush((Queue *)queue, (Transaction *)transaction);
+}
+
+char *calculate_merkleTree(SkipList transactions_list, char merkleRoot[SHA256_BLOCK_SIZE * 2 + 1])
+{
+	Queue * transactions_queue = createQueue();
 	Queue * merkleTree = createQueue();
 	Queue * merkleTreeTemp = createQueue();
-	while (queueEmpty(transactions_list) == false)
+
+	skiplist_map(transactions_list, skiplist_to_queue, transactions_queue);
+	while (queueEmpty(transactions_queue) == false)
 	{
 		char hashNode[SHA256_BLOCK_SIZE * 2 + 1];
-		sha256ofString((char *)queuePop(transactions_list), hashNode);
+		sha256ofString((BYTE *)queuePop(transactions_queue), hashNode);
 		
 		queuePush(merkleTree, strAlloc(hashNode, SHA256_BLOCK_SIZE * 2 + 1));
 	}
@@ -115,7 +124,7 @@ void calculate_merkleTree(Queue * transactions_list, char merkleRoot[SHA256_BLOC
 			strcpy(concatHash12, hash1);
 			strcat(concatHash12, hash2);
 
-			sha256ofString(concatHash12, hash12);
+			sha256ofString((BYTE *)concatHash12, hash12);
 			queuePush(merkleTreeTemp, strAlloc(hash12, SHA256_BLOCK_SIZE * 2 + 1));
 
 			free(hash1);
@@ -131,6 +140,9 @@ void calculate_merkleTree(Queue * transactions_list, char merkleRoot[SHA256_BLOC
 
 	deleteQueue(&merkleTreeTemp);
 	deleteQueue(&merkleTree);
+	deleteQueue(&transactions_queue);
+
+	return merkleRoot;
 }
 
 void print_transaction(FILE *f, Transaction tx)

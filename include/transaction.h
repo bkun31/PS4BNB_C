@@ -58,7 +58,7 @@ Transaction generate_transaction(User user_source, User user_destination);
  * @param transactions_queue File de transactions en attente.
  * @return Queue 
  */
-Queue * construct_transaction_list(Queue *transactions_queue);
+SkipList construct_transaction_list(Queue *transactions_queue);
 
 /**
  * @brief Calcul l'arbre de merkel d'une liste de transaction.
@@ -66,7 +66,7 @@ Queue * construct_transaction_list(Queue *transactions_queue);
  * @param transactions_list Liste des transactions.
  * @param hash Chaîne de caractères d´une taille de 65 octets, qui va contenir le hash code de list_transaction (Merkle Tree Root).
  */
-void calculate_merkleTree(Queue * transactions_list, char merkleRoot[SHA256_BLOCK_SIZE * 2 + 1]);
+char *calculate_merkleTree(SkipList transactions_list, char merkleRoot[SHA256_BLOCK_SIZE * 2 + 1]);
 
 /**
  * @brief imprime sur le fichier f la transaction tx.
