@@ -238,6 +238,13 @@ SkipList skiplist_remove(SkipList d, int key, FreeOperator f)
 		if (remove->next[level] != d->sentinel && remove->next[level]->key == key)
 		{
 			remove = remove->next[level];
+			
+			/* on met à jour les clés des noeuds suivants on les décrémentant de 1 suite à la suppression du noeud courant */
+			for (Node *update_key_node = remove->next[0]; update_key_node != d->sentinel; update_key_node = update_key_node->next[0])
+			{
+				update_key_node->key--;
+			}
+			/* on met à jour les liens avec les noeuds rattaché avec le noeud courant qui va être supprimé */
 			for (level = 0; level < remove->level; level++)
 			{
 				remove->previous[level]->next[level] = remove->next[level];
