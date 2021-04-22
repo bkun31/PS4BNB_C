@@ -19,17 +19,6 @@
 
 #define ERREUR_ALLOCATION_USER 1
 
-#define USER_NAME_SIZE 8
-
-/* ------------------------------------------------------- */
-/* Implémentation structure user */
-
-struct s_User
-{
-    char name[USER_NAME_SIZE];
-    satoBnb wallet;
-};
-
 /* ------------ Déclaration Type : ------------ */
 
 typedef struct s_User *User;

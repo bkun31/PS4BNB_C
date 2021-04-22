@@ -32,20 +32,20 @@ Transaction generate_transaction(User user_source, User user_destination)
 	 *on doit générer un nombre aléatoire qui sera le montant (inférieur à MAX_VALUE et au user.wallet)
 	 */
 	long montantMaximal;
-	if (MAX_VALUE < user_source->wallet) //pour choisir un nombre qui dépasse pas le wallet ni le max value 
+	if (MAX_VALUE < user_wallet(user_source)) //pour choisir un nombre qui dépasse pas le wallet ni le max value 
 	{
 		montantMaximal = MAX_VALUE; 
 	}
 	else 
 	{
-		montantMaximal = user_source->wallet;
+		montantMaximal = user_wallet(user_source);
 	}
 
 	//fonction qui génère un nombre aléatoire 
 	long montantAleatoire=rand()%montantMaximal+1; //génère un nombre entre 1 et MAX_VALUE ou user_source.wallet
 
 	char buffer[1024];
-	sprintf(buffer, "Source %s-Destination : %s %ld", user_source->name, user_destination->name, montantAleatoire);
+	sprintf(buffer, "Source %s-Destination : %s %ld", user_name(user_source), user_name(user_destination), montantAleatoire);
 
 	Transaction transaction = strAlloc(buffer, 100);
 	return transaction;
