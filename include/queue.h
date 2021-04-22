@@ -1,4 +1,4 @@
-//**
+/**
  * @file queue.h
  * @author Mathias Paulin (Mathias.Paulin@irit.fr)
  * @defgroup QueueAT Queue abstract type
