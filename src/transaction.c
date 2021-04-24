@@ -31,7 +31,7 @@ Transaction generate_transaction(User user_source, User user_destination)
 	 *"Source usern-Destination : userm montant_transaction"
 	 *on doit générer un nombre aléatoire qui sera le montant (inférieur à MAX_VALUE et au user.wallet)
 	 */
-	long montantMaximal;
+	satoBnb montantMaximal;
 	if (MAX_VALUE < user_wallet(user_source)) //pour choisir un nombre qui dépasse pas le wallet ni le max value 
 	{
 		montantMaximal = MAX_VALUE; 
@@ -45,7 +45,20 @@ Transaction generate_transaction(User user_source, User user_destination)
 	long montantAleatoire=rand()%montantMaximal+1; //génère un nombre entre 1 et MAX_VALUE ou user_source.wallet
 
 	char buffer[1024];
-	sprintf(buffer, "Source %s-Destination : %s %ld", user_name(user_source), user_name(user_destination), montantAleatoire);
+	sprintf(buffer, "Source %s-Destination : %s %f Bnb", user_name(user_source), user_name(user_destination), satobnb_to_bnb(montantAleatoire));
+
+	Transaction transaction = strAlloc(buffer, 100);
+	return transaction;
+}
+
+Transaction generate_helicopter_transaction(User user, satoBnb amount)
+{
+	/*on doit préparer le format de la transaction qui est : 
+	 *"Coinbase envoie montant_transaction Bnb à usern"
+	 */
+
+	char buffer[1024];
+	sprintf(buffer, "Coinbase envoie %f Bnb à %s",satobnb_to_bnb(amount), user_name(user));
 
 	Transaction transaction = strAlloc(buffer, 100);
 	return transaction;

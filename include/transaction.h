@@ -40,7 +40,7 @@ typedef char *Transaction;
 /**
  * @brief Génère une transaction sous forme de chaine de caractère. \n
  * Le format type de la transaction est le suivant : \n
- * "Source usern-Destination : userm montant_transaction" \n
+ * "Source usern-Destination : userm montant_transaction Bnb" \n
  * où montant_transaction est un nombre aléatoire compris entre 1 et MAX_VALUE.
  * 
  * @param user_source Utilisateur source.
@@ -48,6 +48,18 @@ typedef char *Transaction;
  * @return char* Chaine de caractère de la transaction crée.
  */
 Transaction generate_transaction(User user_source, User user_destination);
+
+/**
+ * @brief Génère une transaction de la phase helicopter money sous forme de chaine de caractère. \n
+ * Le format type de la transaction est le suivant : \n
+ * Coinbase envoie amount Bnb à user" \n
+ * 
+ * @param user Utilisateur.
+ * @param amount Montant.
+ * @return char* Chaine de caractère de la transaction crée.
+ */
+Transaction generate_helicopter_transaction(User user, satoBnb amount);
+
 
 /**
  * @brief Construit une file  de transactions depuis la file globale transactions_queue,
