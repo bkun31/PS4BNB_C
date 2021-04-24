@@ -101,26 +101,30 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 # Dépendences # À COMPLÉTER EN FONCTION DES DÉPÉPENDANCE RÉELLE #
 
-$(OBJDIR)/block.o: $(INCDIR)/block.h $(INCDIR)/transaction.h
+$(OBJDIR)/block.o: $(INCDIR)/block.h $(INCDIR)/transaction.h $(INCDIR)/sha256.h $(INCDIR)/sha256_utils.h
 
 $(OBJDIR)/blockchain.o: $(INCDIR)/blockchain.h $(INCDIR)/block.h
 
-$(OBJDIR)/transaction.o: $(INCDIR)/transaction.h
+$(OBJDIR)/transaction.o: $(INCDIR)/transaction.h $(INCDIR)/user.h $(INCDIR)/queue.h $(INCDIR)/skiplist.h $(INCDIR)/sha256.h $(INCDIR)/sha256_utils.h
 
 $(OBJDIR)/cheater_block.o: $(INCDIR)/block.h $(INCDIR)/transaction.h
 
 $(OBJDIR)/cheater_transaction.o: $(INCDIR)/blockchain.h $(INCDIR)/block.h
 
-$(OBJDIR)/main.o: $(INCDIR)/transaction.h
+$(OBJDIR)/main.o: $(INC)
 
-$(OBJDIR)/sha256_utils.o: $(INCDIR)/block.h $(INCDIR)/transaction.h
+$(OBJDIR)/sha256_utils.o: $(INCDIR)/sha256_utils.h
 
-$(OBJDIR)/sha256.o: $(INCDIR)/blockchain.h $(INCDIR)/block.h
+$(OBJDIR)/sha256.o: $(INCDIR)/sha256.h
 
-$(OBJDIR)/test_sha.o: $(INCDIR)/transaction.h
+$(OBJDIR)/bnb.o: $(INCDIR)/bnb.h
 
-$(OBJDIR)/transaction.o: $(INCDIR)/block.h $(INCDIR)/transaction.h
+$(OBJDIR)/user.o: $(INCDIR)/user.h
 
-$(OBJDIR)/user.o: $(INCDIR)/blockchain.h $(INCDIR)/block.h
+$(OBJDIR)/queue.o: $(INCDIR)/queue.h
 
-$(OBJDIR)/verification.o: $(INCDIR)/transaction.h
+$(OBJDIR)/skiplist.o: $(INCDIR)/skiplist.h $(INCDIR)/rng.h
+
+$(OBJDIR)/rng.o: $(INCDIR)/rng.h
+
+$(OBJDIR)/config.o: $(INCDIR)/config.h
