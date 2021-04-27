@@ -1,4 +1,4 @@
-#!/bin/zsh
+#!/bin/sh
 
 #run unit tests (all by default)
 #Usage : $0 [test_num]
@@ -71,7 +71,7 @@ else
         ./test_block
 
     elif [ "2" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/blockchain.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c blockchain-tests/test_blockchain.c -o blockchain-tests/test_blockchain
+        gcc -Wall -Werror -std=c99 ../src/blockchain.c ../src/transaction.c ../src/queue.c ../src/user.c ../src/bnb.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c blockchain-tests/test_blockchain.c -o blockchain-tests/test_blockchain
         cd blockchain-tests/
 
         echo "Run test_blockchain\n"
