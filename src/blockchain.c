@@ -20,28 +20,18 @@ typedef int make_iso_compilers_happy;
 #define MAX_LEVELS_SKIPLIST 5 /* on va prendre 5 pour commencer */
 
 /* ------------------------------------------------------- */
-/* Implémentation structure blockchain*/
-
-struct s_Blockchain
-{
-    int dificulty;          //difficulte
-    int b_nb;        //nombre de block de la chaine
-    SkipList b_list; //liste de blocks
-};
-
-/* ------------------------------------------------------- */
-
-/* ------------------------------------------------------- */
 /* Constructeur */
 
-Blockchain blockchain_create(int dificulty)
+Blockchain blockchain_create(int difficulty)
 {
     Blockchain blockchain = malloc(sizeof(struct s_Blockchain));
 
     /* on crée une liste de transaction avec une unique transaction à l´interieur
     se réduisant à la chaîne de caractère Génésis */
     SkipList genesis_tx = skiplist_create(1);
-    skiplist_insert(genesis_tx, 0, "Génésis");
+    Transaction tx = malloc(8*sizeof(char));
+    strcpy(tx, "Genesis");
+    skiplist_insert(genesis_tx, 0, tx);
 
     Block genesis = block_create(0, genesis_tx, "\0");
 
@@ -49,7 +39,7 @@ Blockchain blockchain_create(int dificulty)
     skiplist_insert(blockchain->b_list, 0, genesis);
 
     blockchain->b_nb = 1;
-    blockchain->dificulty = dificulty;
+    blockchain->difficulty = difficulty;
     return blockchain;
 }
 
@@ -64,7 +54,7 @@ Blockchain next_block_create(Blockchain bc, SkipList list_transaction)
     Block blk = block_create(bc->b_nb, list_transaction, (char *) block_hash(skiplist_ith(bc->b_list, bc->b_nb - 1)));
     skiplist_insert(bc->b_list, bc->b_nb, blk);
 
-    proof_of_work(blk, bc->dificulty);
+    proof_of_work(blk, bc->difficulty);
     (bc->b_nb)++;
     return bc;
 }
@@ -154,7 +144,7 @@ void blockchain_dump(FILE *f, Blockchain bc)
 		printf("				***************\n");
     printf("*******************************************************************************************\n");
 
-    fprintf(f, "\nDifficulté = %d\n", bc->dificulty);
+    fprintf(f, "\nDifficulté = %d\n", bc->difficulty);
     fprintf(f, "Longueur = %d\n", bc->b_nb);
     int index = 0;
     while (index < bc->b_nb)

@@ -29,18 +29,6 @@
 
 /* Structure Bloc */
 
-struct s_Block
-{
-    time_t timestamp;                              /* timestamp */
-    unsigned int index;                            /* indice du bloc */
-    unsigned int nonce;                            /* nonce du bloc */
-    unsigned int tx_count;                         /* nombre de transactions que contient le bloc */
-    SkipList transactions;                         /* liste de transactions contenue dans le bloc */
-    char merkle_tree[SHA256_BLOCK_SIZE * 2 + 1];   /* Arbre de merkle de la liste des transactions */
-    char hash[SHA256_BLOCK_SIZE * 2 + 1];          /* hash du bloc courant*/
-    char previous_hash[SHA256_BLOCK_SIZE * 2 + 1]; /* hash du bloc précédent */
-};
-
 /***************
 * Constructeur *
 ****************/

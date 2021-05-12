@@ -18,7 +18,7 @@
 #include "../../include/user.h"
 #include "../../include/transaction.h"
 
-#include "../../src/block.c"
+#include "../../include/block.h"
 
 void verif(bool mod, bool v_is_valid_genesis, bool v_is_valid_block, bool v_is_valid_chain, bool v_is_valid_block_merkleTree, bool v_is_valid_chain_merkleTree) {
   if (mod) {

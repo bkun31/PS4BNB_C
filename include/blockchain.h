@@ -24,12 +24,21 @@
 #include "../include/skiplist.h"
 
 /* ------------ Déclaration Type : ------------ */
+/* ------------------------------------------------------- */
+/* Implémentation structure blockchain*/
 
 /**
  * @brief Définition du type abstrait de donnée Blockchain
  *
  */
-typedef struct s_Blockchain *Blockchain;
+typedef struct s_Blockchain
+{
+    int difficulty;   //difficulte
+    int b_nb;        //nombre de block de la chaine
+    SkipList b_list; //liste de blocks
+}* Blockchain;
+
+/* ------------------------------------------------------- */
 
 /* ------------ Déclaration Constructeur : ------------ */
 
