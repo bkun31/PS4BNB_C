@@ -15,6 +15,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <signal.h>
+#include <unistd.h>
 #include "../include/user.h"
 #include "../include/block.h"
 #include "../include/transaction.h"
@@ -22,6 +24,7 @@
 #include "../include/queue.h"
 #include "../include/bnb.h"
 #include "../include/config.h"
+#include "../include/cheaters.h"
 
 #define MAX_LIST_USER_SIZE config.max_users
 #define MAX_TX_AMOUNT config.max_tx_amount
@@ -34,11 +37,22 @@
 #define BNB_HALVING config.bnb_halving
 #define MAX_BLOCK config.max_block
 
-void cheater_block(SkipList chain, unsigned int index);
-void cheater_transaction(SkipList chain, unsigned int index);
+static volatile bool stop_running = false;
+
+void interrupt(int code)
+{
+  fprintf(stdout, "\n>>> SIGINT received [%d]\n", code);
+  stop_running = true;
+}
+
+void exit_function() {
+    printf( "\nExiting...\n" );
+}
 
 int main()
 {
+  atexit(exit_function);  /* Lance la fonction exit_function quand le programme se termine normalement sans erreurs */
+  signal(SIGINT, &interrupt); /* Permet de lancer la fonction interrupt si SIGINT est intercepté */
   conf config = conf_init();
   User users[config.max_users];
   Blockchain blockchain;
@@ -82,7 +96,7 @@ int main()
   fprintf(stdout, "\n-------------------- GENESIS-END --------------------\n");
 
   /* on termine le programme si on a atteint la limite de block pour la blockchain */
-  if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK)
+  if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK || stop_running)
   {
     goto end_execution;
   }
@@ -115,17 +129,20 @@ int main()
     /* on utilise les cheaters, s´il sont activé et selon leur fréquences d´activation */
     if (CHEATER_BLOCK && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
+      puts("\nCheater Block !\n");
       unsigned int delete_index_block = (unsigned int)(rand() % blockchain_size(blockchain));
-      cheater_block(get_chain(blockchain), delete_index_block);
+      cheater_deleteBlock(blockchain, delete_index_block);
     }
     if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
+      puts("\nCheater Block !\n");
       unsigned int delete_index_block_tx = (unsigned int)(rand() % blockchain_size(blockchain));
-      cheater_transaction(get_chain(blockchain), delete_index_block_tx);
+      unsigned int delete_index_tx = (unsigned int)(rand() % block_tx_count(get_block(blockchain, delete_index_block_tx)));
+      cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
     }
 
     /* on termine le programme si on a atteint la limite de block pour la blockchain */
-    if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK)
+    if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK || stop_running)
     {
       goto end_execution;
     }
@@ -141,13 +158,13 @@ int main()
     /* phase inflation, on génère des transactions aléatoires que l´on met dans une file queue_transaction
     puis on crée un nouveau bloc en piochant ces transactions dans la file et on les mettants dans une liste */
     SkipList tx_list = skiplist_create(1);
-    int gen_tx_count = rand() % MAX_TRANSACTIONS + 1;
+    int gen_tx_count = rand() % MAX_TX_IN_BLOCK + 1;
     int tx_position = 0;
     for (int i = 0; i < gen_tx_count; i++)
     {
       int user_source = rand() % MAX_LIST_USER_SIZE;
       int user_destination = rand() % MAX_LIST_USER_SIZE;
-      queuePush(queue_transaction, generate_transaction(users[user_source], users[user_destination]));
+      queuePush(queue_transaction, generate_transaction(users[user_source], users[user_destination], MAX_TX_AMOUNT));
     }
     gen_tx_count = rand() % MAX_LIST_USER_SIZE + 1;
     while (gen_tx_count > 0 && !queueEmpty(queue_transaction))
@@ -172,17 +189,19 @@ int main()
     /* on utilise les cheaters, s´il sont activé et selon leur fréquences d´activation */
     if (CHEATER_BLOCK && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
+      puts("\nCheater Block !\n");
       unsigned int delete_index_block = (unsigned int)(rand() % blockchain_size(blockchain));
-      cheater_block(get_chain(blockchain), delete_index_block);
+      cheater_deleteBlock(blockchain, delete_index_block);
     }
     if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
+      puts("\nCheater Transaction !\n");
       unsigned int delete_index_block_tx = (unsigned int)(rand() % blockchain_size(blockchain));
-      cheater_transaction(get_chain(blockchain), delete_index_block_tx);
+      unsigned int delete_index_tx = (unsigned int)(rand() % block_tx_count(get_block(blockchain, delete_index_block_tx)));
+      cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
     }
-
     /* on termine le programme si on a atteint la limite de block pour la blockchain */
-    if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK)
+    if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK || stop_running)
     {
       goto end_execution;
     }
@@ -200,13 +219,13 @@ int main()
   {
     /* même chose que l´inflation sauf qu´il n´y a plus de récompenses pour les mineurs */
     SkipList tx_list = skiplist_create(1);
-    int gen_tx_count = rand() % MAX_TRANSACTIONS + 1;
+    int gen_tx_count = rand() % MAX_TX_IN_BLOCK + 1;
     int tx_position = 0;
     for (int i = 0; i < gen_tx_count; i++)
     {
       int user_source = rand() % MAX_LIST_USER_SIZE;
       int user_destination = rand() % MAX_LIST_USER_SIZE;
-      queuePush(queue_transaction, generate_transaction(users[user_source], users[user_destination]));
+      queuePush(queue_transaction, generate_transaction(users[user_source], users[user_destination], MAX_TX_AMOUNT));
     }
     gen_tx_count = rand() % MAX_LIST_USER_SIZE + 1;
     while (gen_tx_count > 0 && !queueEmpty(queue_transaction))
@@ -224,17 +243,20 @@ int main()
     /* on utilise les cheaters, s´il sont activé et selon leur fréquences d´activation */
     if (CHEATER_BLOCK && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
+      puts("\nCheater Block !\n");
       unsigned int delete_index_block = (unsigned int)(rand() % blockchain_size(blockchain));
-      cheater_block(get_chain(blockchain), delete_index_block);
+      cheater_deleteBlock(blockchain, delete_index_block);
     }
     if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
+      puts("\nCheater Block !\n");
       unsigned int delete_index_block_tx = (unsigned int)(rand() % blockchain_size(blockchain));
-      cheater_transaction(get_chain(blockchain), delete_index_block_tx);
+      unsigned int delete_index_tx = (unsigned int)(rand() % block_tx_count(get_block(blockchain, delete_index_block_tx)));
+      cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
     }
 
     /* on termine le programme si on a atteint la limite de block pour la blockchain */
-    if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK)
+    if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK || stop_running)
     {
       goto end_execution;
     }
@@ -244,7 +266,10 @@ int main()
   /* -------------------- MARKET-END -------------------- */
 
 end_execution:
-  blockchain_dump(stdout, blockchain);
+  if (is_valid_chain(blockchain) && is_valid_chain_merkleTree(blockchain))
+  {
+    blockchain_dump(stdout, blockchain);
+  }
 
   return 0;
 }
