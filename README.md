@@ -59,3 +59,24 @@ Quoi qu'il arrive, les fichiers objets (.o) seront stockés dans le dossier obj 
   - - - `CHEATER_BLOCK`          Si définit à 0, le cheater block sera désactivé pendant l'exécution, le définir à 1 l'active durant l'exécution.
   - - - `CHEATER_TRANSACTION`    Si définit à 0, le cheater transaction sera désactivé pendant l'exécution, le définir à 1 l'active durant l'exécution.
   - - - `CHEATER_FREQUENCY`      Définit la fréquence d'activation des cheaters durant l'exécution du programme, doit être un réel entre 0 et 1, par exemple si définit à 0.1 la fréquence d'activation des cheaters est de 10%, si définit à 0, les cheaters seront automatiquement désativé même si les deux paramètres précédents sont définis sur 1.
+  
+  ## Lancement des tests
+  - Un scipt de test `test.sh` est fournis dans le dossier test afin de pouvoir lancer les test unitaires. Il suffit de taper dans un terminal à la racine du projet la commande ci-dessous pour lancer tous les tests en même temps :
+    ```sh
+    test/test.sh
+    ```
+  - On peut aussi lancer les tests de façon individuel avec la syntaxe suivante :
+  ```sh
+  test/test.sh [test_num]
+  ```
+  Ou test_num est un entier entre 1 et 8 inclus représentant le test à lancer. Ces tests sont les suivants :
+  ```
+  1 test block
+  2 test blockchain
+  3 test transaction
+  4 test user
+  5 test bnb
+  6 test cheaters
+  7 test config
+  8 test sha256
+  ```
