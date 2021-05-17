@@ -1,11 +1,21 @@
+/**
+ * @file cheaters.c
+ * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
+ * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
+ * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
+ * @brief 
+ * @version 0.1
+ * @date 2021-05-17
+ * 
+ * @copyright Domaine public 2021
+ * 
+ */
+
 #include <stdio.h>
 #include <string.h>
 #include "../include/cheaters.h"
-
-#include "../include/block.h" //inclu en .c pour permettre de modifier les attributs du bloc directement
-
+#include "../include/block.h"
 #include "../include/transaction.h"
-
 #include "../include/blockchain.h"
 
 void free_transaction(void *tx)
@@ -53,7 +63,7 @@ int cheater_recalcul(Blockchain blockchain, unsigned int indexBloc, unsigned int
     // }
     // if (!skiplist_iterator_end(it))
     //     printf("Block Index 2nd while : %d\n", block_index(skiplist_iterator_value(it)));
-    
+
     while (skiplist_iterator_end(it) == false) //Tant qu'on n'a pas atteint la sentinel
     {
         Block blk = (Block)skiplist_iterator_value(it);

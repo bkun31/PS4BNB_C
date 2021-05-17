@@ -1,3 +1,16 @@
+/**
+ * @file cheaters.h
+ * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
+ * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
+ * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
+ * @brief Interface Cheaters
+ * @version 0.1
+ * @date 2021-05-17
+ * 
+ * @copyright Domaine public 2021
+ * 
+ */
+
 #ifndef CHEATER_H
 #define CHEATER_H
 
@@ -22,7 +35,6 @@
  */
 bool cheater_deleteBlock(Blockchain blockchain, unsigned int indexBloc);
 
-
 /**
  * @brief Recalcule le hash et l'index des blocs suivants celui qui a été supprimé. \n
  * 
@@ -31,8 +43,7 @@ bool cheater_deleteBlock(Blockchain blockchain, unsigned int indexBloc);
  * @param cheaterType type de cheater : CHEATER_BLOCK_ ou CHEATER_TRANSACTION_
  * @return temps d'execution du programme en millisecondes
  */
-int cheater_recalcul(Blockchain blockchain, unsigned int indexBloc, unsigned int cheaterType); 
-
+int cheater_recalcul(Blockchain blockchain, unsigned int indexBloc, unsigned int cheaterType);
 
 /**
  * @brief Supprime une transaction + recalcul merkle tree. \n
@@ -44,7 +55,4 @@ int cheater_recalcul(Blockchain blockchain, unsigned int indexBloc, unsigned int
  */
 bool cheater_deleteTransaction(Blockchain blockchain, unsigned int indexBloc, int indexTransaction);
 
-
-
-
-#endif 
+#endif

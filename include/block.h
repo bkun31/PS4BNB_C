@@ -50,7 +50,7 @@ struct s_Block
 /**
  * @brief Construit un bloc. \n
  * Calcul l´arbre de merkle de la liste de transactions passée en paramètre
- * et calcul le hash du bloc sans respecté de difficulté (pas de minage).
+ * et calcul le hash du bloc sans respecter de difficulté (pas de minage).
  * 
  * @param index Numéro du bloc.
  * @param transactions Liste de transactions à mettre dans le bloc.

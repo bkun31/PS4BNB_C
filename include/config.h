@@ -3,7 +3,8 @@
  * @author Cédric Carro (cedric.carro@univ-tlse3.fr)
  * @author Asma Hamza (asma.hamza@univ-tlse3.fr)
  * @author Bilel Besseghieur (bilel.besseghieur@univ-tlse3.fr)
- * @brief 
+ * @author Emmanuel Lavinal (Emmanuel.Lavinal@univ-tlse3.fr)
+ * @brief Interface des configurations de la blockchain.\n Merci à monsieur Emmanuel Lavinal dont nous nous sommes grandement inspiré de son travail disponible dans les tp de l'UE Réseaux 2.
  * @version 0.1
  * @date 2021-04-23
  * 
