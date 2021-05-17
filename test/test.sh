@@ -8,9 +8,9 @@
 # 3 test transaction
 # 4 test user
 # 5 test bnb
-# 6 test cheater block
-# 7 test cheater transaction
-# 8 test config
+# 6 test cheaters
+# 7 test config
+# 8 test sha256
 
 cd $(dirname $0)
 
@@ -20,109 +20,127 @@ if [ $# -ge 2 ]; then
 fi
 
 if [ $# -eq 0 ]; then
-    gcc -Wall -Werror -std=c99 -g../src/block.c ../src/skiplist.c ../src/rng.c ../src/sha256_utils.c ../src/sha256.c block-tests/test_block.c -o block-tests/test_block
-    gcc -Wall -Werror -std=c99 -g../src/blockchain.c blockchain-tests/test_blockchain.c -o blockchain-tests/test_blockchain
-    gcc -Wall -Werror -std=c99 -g ../src/transaction.c transaction-tests/test_transaction.c -o transaction-tests/test_transaction
-    gcc -Wall -Werror -std=c99 -g ../src/user.c user-tests/test_user.c -o user-tests/test_user
+    gcc -Wall -Werror -std=c99 -g ../src/block.c ../src/skiplist.c ../src/rng.c ../src/sha256_utils.c ../src/sha256.c ../src/transaction.c ../src/queue.c ../src/user.c ../src/bnb.c block-tests/test_block.c -o block-tests/test_block
+    gcc -Wall -Werror -std=c99 -g ../src/blockchain.c ../src/block.c ../src/transaction.c ../src/queue.c ../src/user.c ../src/bnb.c ../src/skiplist.c ../src/rng.c ../src/sha256_utils.c ../src/sha256.c blockchain-tests/test_blockchain.c -o blockchain-tests/test_blockchain
+    gcc -Wall -Werror -std=c99 -g ../src/transaction.c ../src/user.c ../src/bnb.c ../src/queue.c ../src/skiplist.c ../src/rng.c transaction-tests/test_transaction.c ../src/sha256_utils.c ../src/sha256.c -o transaction-tests/test_transaction
+    gcc -Wall -Werror -std=c99 -g ../src/user.c ../src/bnb.c ../src/queue.c user-tests/test_user.c -o user-tests/test_user
     gcc -Wall -Werror -std=c99 -g ../src/bnb.c bnb-tests/test_bnb.c -o bnb-tests/test_bnb
-    gcc -Wall -Werror -std=c99 -g ../src/cheater_block.c cheater_block-tests/test_cheater_block.c -o cheater_block-tests/test_cheater_block
-    gcc -Wall -Werror -std=c99 -g ../src/cheater_transaction.c cheater_transaction-tests/test_cheater_transaction.c -o cheater_transaction-tests/test_cheater_transaction
+    gcc -Wall -Werror -std=c99 -g ../src/cheaters.c ../src/skiplist.c ../src/rng.c ../src/user.c ../src/transaction.c ../src/blockchain.c ../src/block.c ../src/queue.c ../src/bnb.c ../src/sha256_utils.c ../src/sha256.c cheaters-tests/test_cheaters.c -o cheaters-tests/test_cheaters
     gcc -Wall -Werror -std=c99 -g ../src/config.c ../src/bnb.c config-tests/test_config.c -o config-tests/test_config
+    gcc -Wall -Werror -std=c99 -g ../src/sha256.c ../src/sha256_utils.c sha256-tests/test_sha.c -o sha256-tests/test_sha
 
-    cd block_tests/
-    echo "Run test_block\n"
-    block-tests/test_block
+    cd block-tests/
+    printf "\n---------- Run test_block ---------\n\n"
+    ./test_block
+    rm ./test_block
 
     cd ../blockchain-tests/
-    echo "Run test_blockchain\n"
-    blockchain-test/test_blockchain
+    printf "\n---------- Run test_blockchain ---------\n\n"
+    ./test_blockchain
+    rm ./test_blockchain
 
     cd ../transaction-tests/
-    echo "Run test_transaction\n"
-    transaction-tests/test_transaction
+    printf "\n---------- Run test_transaction ---------\n\n"
+    ./test_transaction
+    rm ./test_transaction
 
     cd ../user-tests/
-    echo "Run test_user\n"
-    user-tests/test_user
+    printf "\n---------- Run test_user ---------\n\n"
+    ./test_user
+    rm ./test_user
 
     cd ../bnb-tests/
-    echo "Run test_bnb\n"
-    bnb-tests/test_bnb
+    printf "\n---------- Run test_bnb ---------\n\n"
+    ./test_bnb
+    rm ./test_bnb
 
-    cd ../cheater_block-tests/
-    echo "Run test_cheater_block\n"
-    cheater_block-tests/test_cheater_block
+    cd ../cheaters-tests/
+    printf "\n---------- Run test_cheaters ---------\n\n"
+    ./test_cheaters
+    rm ./test_cheaters
 
-    cd ../cheater_transaction-tests/
-    echo "Run test_cheater_transaction\n"
-    cheater_transaction-tests/cheater_transaction
-
-    cd ../..
-    echo "Run test_config\n"
+    cd ../../
+    printf "\n---------- Run test_config ---------\n\n"
     ./test/config-tests/test_config
+    rm ./test/config-tests/test_config
+
+    cd test/sha256-tests/
+    printf "\n---------- Run test_sha ---------\n\n"
+    ./test_sha
+    rm ./test_sha
 
 else
     if [ "1" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/block.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c ../src/transaction.c ../src/queue.c ../src/user.c ../src/bnb.c block-tests/test_block.c -o block-tests/test_block
+        gcc -Wall -Werror -std=c99 -g ../src/block.c ../src/skiplist.c ../src/rng.c ../src/sha256_utils.c ../src/sha256.c ../src/transaction.c ../src/queue.c ../src/user.c ../src/bnb.c block-tests/test_block.c -o block-tests/test_block
         cd block-tests/
 
-        echo "Run test_block\n"
+        printf "\n---------- Run test_block ---------\n\n"
 
         ./test_block
+        rm ./test_block
 
     elif [ "2" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/blockchain.c ../src/transaction.c ../src/queue.c ../src/user.c ../src/bnb.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c blockchain-tests/test_blockchain.c -o blockchain-tests/test_blockchain
+        gcc -Wall -Werror -std=c99 -g ../src/blockchain.c ../src/block.c ../src/transaction.c ../src/queue.c ../src/user.c ../src/bnb.c ../src/skiplist.c ../src/rng.c ../src/sha256_utils.c ../src/sha256.c blockchain-tests/test_blockchain.c -o blockchain-tests/test_blockchain
         cd blockchain-tests/
 
-        echo "Run test_blockchain\n"
+        printf "\n---------- Run test_blockchain ---------\n\n"
 
         ./test_blockchain
+        rm ./test_blockchain
 
     elif [ "3" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/transaction.c ../src/user.c ../src/bnb.c -g ../src/queue.c ../src/skiplist.c ../src/rng.c transaction-tests/test_transaction.c ../src/sha256_utils.c ../src/sha256.c -o transaction-tests/test_transaction
+        gcc -Wall -Werror -std=c99 -g ../src/transaction.c ../src/user.c ../src/bnb.c ../src/queue.c ../src/skiplist.c ../src/rng.c transaction-tests/test_transaction.c ../src/sha256_utils.c ../src/sha256.c -o transaction-tests/test_transaction
         cd transaction-tests/
 
-        echo "Run test_transaction\n"
+        printf "\n---------- Run test_transaction ---------\n\n"
 
         ./test_transaction
+        rm ./test_transaction
 
     elif [ "4" -eq $1 ]; then
         gcc -Wall -Werror -std=c99 -g ../src/user.c ../src/bnb.c ../src/queue.c user-tests/test_user.c -o user-tests/test_user
         cd user-tests/
 
-        echo "Run test_user\n"
+        printf "\n---------- Run test_user ---------\n\n"
 
         ./test_user
+        rm ./test_user
 
     elif [ "5" -eq $1 ]; then
         gcc -Wall -Werror -std=c99 -g ../src/bnb.c bnb-tests/test_bnb.c -o bnb-tests/test_bnb
         cd bnb-tests/
 
-        echo "Run test_bnb\n"
+        printf "\n---------- Run test_bnb ---------\n\n"
 
         ./test_bnb
+        rm ./test_bnb
 
     elif [ "6" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/cheater_block.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c cheater_block-tests/test_cheater_block.c -o cheater_block-tests/test_cheater_block
-        cd cheater_block-tests/
+        gcc -Wall -Werror -std=c99 -g ../src/cheaters.c ../src/skiplist.c ../src/rng.c ../src/user.c ../src/transaction.c ../src/blockchain.c ../src/block.c ../src/queue.c ../src/bnb.c ../src/sha256_utils.c ../src/sha256.c cheaters-tests/test_cheaters.c -o cheaters-tests/test_cheaters
+        cd cheaters-tests/
 
-        echo "Run test_cheater_block\n"
-        ./test_cheater_block
+        printf "\n---------- Run test_cheaters ---------\n\n"
+        ./test_cheaters
+        rm ./test_cheaters
 
     elif [ "7" -eq $1 ]; then
-        gcc -Wall -Werror -std=c99 ../src/cheater_transaction.c ../src/skiplist.c -g ../src/rng.c ../src/sha256_utils.c ../src/sha256.c cheater_transaction-tests/test_cheater_transaction.c -o cheater_transaction-tests/test_cheater_transaction
-        cd cheater_transaction-tests/
-
-        echo "Run test_cheater_transaction\n"
-        ./test_cheater_transaction
-
-    elif [ "8" -eq $1 ]; then
         gcc -Wall -Werror -std=c99 -g ../src/config.c ../src/bnb.c config-tests/test_config.c -o config-tests/test_config
         cd ../
 
-        echo "Run test_config\n"
+        printf "\n---------- Run test_config ---------\n\n"
         ./test/config-tests/test_config
+        rm ./test/config-tests/test_config
+
+    elif [ "8" -eq $1 ]; then
+        gcc -Wall -Werror -std=c99 -g ../src/sha256.c ../src/sha256_utils.c sha256-tests/test_sha.c -o sha256-tests/test_sha
+        cd sha256-tests/
+
+        printf "\n---------- Run test_sha ---------\n\n"
+        ./test_sha
+        rm ./test_sha
+
     fi
+
 fi
 
 exit 0
