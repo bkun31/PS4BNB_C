@@ -103,14 +103,14 @@ int main() {
   //test blockchain_create, is_valid_genesis
   bool v_is_valid_genesis = is_valid_genesis(bc) && blockchain_size(bc) == 1;
 
-  Transaction tx = generate_transaction(users[0], users[1]);
+  Transaction tx = generate_transaction(users[0], users[1], 894750920849);
   skiplist_insert(list_transaction, 0, tx);
   bc = next_block_create(bc, list_transaction);
   //test next_block_create, is_valid_block
   bool v_is_valid_block = is_valid_block(bc, blockchain_size(bc)-1);
 
   bc = next_block_create(bc, list_transaction);
-  tx = generate_transaction(users[1], users[0]);
+  tx = generate_transaction(users[1], users[0], 39219194041);
   skiplist_insert(list_transaction, 0, tx);
   bc = next_block_create(bc, list_transaction);
   //test is_valid_chain

@@ -43,11 +43,11 @@ int main()
     // char * transaction2 = generate_transaction(usr0, usr5);
     // char * transaction3 = generate_transaction(usr0, usr5);
 
-    queuePush(transactions_queue, generate_transaction(usr0, usr5));
-    queuePush(transactions_queue, generate_transaction(usr0, usr5));
-    queuePush(transactions_queue, generate_transaction(usr0, usr5));
-    queuePush(transactions_queue, generate_transaction(usr0, usr5));
-    queuePush(transactions_queue, generate_transaction(usr0, usr5));
+    queuePush(transactions_queue, generate_transaction(usr0, usr5, 657927520042));
+    queuePush(transactions_queue, generate_transaction(usr0, usr5, 42761054842));
+    queuePush(transactions_queue, generate_transaction(usr0, usr5, 1438479734682));
+    queuePush(transactions_queue, generate_transaction(usr0, usr5, 378263188364));
+    queuePush(transactions_queue, generate_transaction(usr0, usr5, 3729192734743));
 
     SkipList transactions_list = construct_transaction_list(transactions_queue);
 
