@@ -95,7 +95,7 @@ $(BIN) : $(BINDIR) $(OBJ)
 	@echo "Linking complete!"
 
 # Construction des fichiers objet
-$(OBJDIR)/%.o: $(SRCDIR)/%.c
+$(OBJDIR)/%.o: $(SRCDIR)/%.c $(OBJDIR)
 	@$(CC) -c $< -o $@ $(CFLAGS)
 	@echo "Compiled "$<" successfully!"
 
