@@ -32,7 +32,8 @@
 # Executables
 simuBnb
 test/*
-!test/*/.c
+!test/*-tests/
+!test/*-tests/*.c
 !test/*.sh
 *.exe
 *.out
