@@ -33,7 +33,7 @@ Blockchain blockchain_create(int difficulty)
     strcpy(tx, "Genesis");
     skiplist_insert(genesis_tx, 0, tx);
 
-    Block genesis = block_create(0, genesis_tx, "\0");
+    Block genesis = block_create(0, genesis_tx, "0");
 
     blockchain->b_list = skiplist_create(MAX_LEVELS_SKIPLIST);
     skiplist_insert(blockchain->b_list, 0, genesis);
@@ -76,7 +76,7 @@ bool is_valid_genesis(const Blockchain bc)
     //hash_c hash du genesis recalculé
     char hash_c[SHA256_BLOCK_SIZE * 2 + 1];
     calculate_hash_block(genesis, hash_c);
-    return block_index(genesis) == 0 && !strcmp(block_prevhash(genesis), "") && !strcmp(hash_c, block_hash(genesis));
+    return block_index(genesis) == 0 && !strcmp(block_prevhash(genesis), "0") && !strcmp(hash_c, block_hash(genesis));
 }
 
 bool is_valid_block(const Blockchain bc, unsigned int index)
@@ -90,7 +90,7 @@ bool is_valid_block(const Blockchain bc, unsigned int index)
 
         char hash_recalculated[SHA256_BLOCK_SIZE * 2 + 1];
         calculate_hash_block(blk, hash_recalculated);
-
+        // printf("%d == %d && %d && %d\n%s == %s \n&& %s == %s\n\n", block_index(blk)-1, block_index(blk_prev), !strcmp(block_prevhash(blk), block_hash(blk_prev)), !strcmp(block_hash(blk), hash_recalculated),block_prevhash(blk), block_hash(blk_prev), block_hash(blk), hash_recalculated);
         return block_index(blk)-1 == block_index(blk_prev) && !strcmp(block_prevhash(blk), block_hash(blk_prev)) && !strcmp(block_hash(blk), hash_recalculated);
     }
 }
