@@ -21,9 +21,6 @@
 #include "sha256.h"
 #include "queue.h"
 
-#define MAX_VALUE 1000000000 /* Montant max en satoBnb des transactions (10 Bnb) */
-#define MAX_TRANSACTIONS 10  /* Nombre de transactions maximum dans une liste */
-
 #define ERREUR_GENERATION_TRANSACTION 1
 #define ERREUR_CALCUL_MERKLEROOT 2
 
@@ -47,7 +44,7 @@ typedef char *Transaction;
  * @param user_destination Utilisatuer destiniation.
  * @return char* Chaine de caractère de la transaction crée.
  */
-Transaction generate_transaction(User user_source, User user_destination);
+Transaction generate_transaction(User user_source, User user_destination, satoBnb max_amount);
 
 /**
  * @brief Génère une transaction de la phase helicopter money sous forme de chaine de caractère. \n

@@ -45,13 +45,14 @@ void interrupt(int code)
   stop_running = true;
 }
 
-void exit_function() {
-    printf( "\nExiting...\n" );
+void exit_function()
+{
+  printf("\nExiting...\n");
 }
 
 int main()
 {
-  atexit(exit_function);  /* Lance la fonction exit_function quand le programme se termine normalement sans erreurs */
+  atexit(exit_function);      /* Lance la fonction exit_function quand le programme se termine normalement sans erreurs */
   signal(SIGINT, &interrupt); /* Permet de lancer la fonction interrupt si SIGINT est intercepté */
   conf config = conf_init();
   User users[config.max_users];
@@ -129,16 +130,44 @@ int main()
     /* on utilise les cheaters, s´il sont activé et selon leur fréquences d´activation */
     if (CHEATER_BLOCK && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
-      puts("\nCheater Block !\n");
+      clock_t t;
+      t = clock();
+      //printf("Compteur demarre\n");
+
       unsigned int delete_index_block = (unsigned int)(rand() % blockchain_size(blockchain));
+      delete_index_block = !delete_index_block ? 1 : delete_index_block;
+      printf("\nCheater Block for Block index : %d !\n", delete_index_block);
       cheater_deleteBlock(blockchain, delete_index_block);
+
+      //printf("Compteur fini \n");
+      t = clock() - t;
+      double time_taken = ((double)t) / CLOCKS_PER_SEC; // calculate the elapsed time
+      printf("The cheater took %f seconds to execute\n\n", time_taken);
     }
-    if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
+    else if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
-      puts("\nCheater Block !\n");
+      clock_t t;
+      t = clock();
+      //printf("Compteur demarre\n");
+
       unsigned int delete_index_block_tx = (unsigned int)(rand() % blockchain_size(blockchain));
+      delete_index_block_tx = !delete_index_block_tx ? 1 : delete_index_block_tx;
       unsigned int delete_index_tx = (unsigned int)(rand() % block_tx_count(get_block(blockchain, delete_index_block_tx)));
-      cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
+      if (block_tx_count(get_block(blockchain, delete_index_block_tx)) > 1)
+      {
+        printf("\nCheater Transaction for Block index : %d, transaction %d !\n\n", delete_index_block_tx, delete_index_tx);
+        cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
+      }
+      else
+      {
+        printf("\nCheater Block : Block index : %d!\n", delete_index_block_tx);
+        cheater_deleteBlock(blockchain, delete_index_block_tx);
+      }
+
+      //printf("Compteur fini \n");
+      t = clock() - t;
+      double time_taken = ((double)t) / CLOCKS_PER_SEC; // calculate the elapsed time
+      printf("The cheater took %f seconds to execute\n\n", time_taken);
     }
 
     /* on termine le programme si on a atteint la limite de block pour la blockchain */
@@ -189,17 +218,46 @@ int main()
     /* on utilise les cheaters, s´il sont activé et selon leur fréquences d´activation */
     if (CHEATER_BLOCK && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
-      puts("\nCheater Block !\n");
+      clock_t t;
+      t = clock();
+      //printf("Compteur demarre\n");
+
       unsigned int delete_index_block = (unsigned int)(rand() % blockchain_size(blockchain));
+      delete_index_block = !delete_index_block ? 1 : delete_index_block;
+      printf("\nCheater Block for Block index : %d !\n", delete_index_block);
       cheater_deleteBlock(blockchain, delete_index_block);
+
+      //printf("Compteur fini \n");
+      t = clock() - t;
+      double time_taken = ((double)t) / CLOCKS_PER_SEC; // calculate the elapsed time
+      printf("The cheater took %f seconds to execute\n\n", time_taken);
     }
-    if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
+    else if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
-      puts("\nCheater Transaction !\n");
+      clock_t t;
+      t = clock();
+      //printf("Compteur demarre\n");
+
       unsigned int delete_index_block_tx = (unsigned int)(rand() % blockchain_size(blockchain));
+      delete_index_block_tx = !delete_index_block_tx ? 1 : delete_index_block_tx;
       unsigned int delete_index_tx = (unsigned int)(rand() % block_tx_count(get_block(blockchain, delete_index_block_tx)));
-      cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
+      if (block_tx_count(get_block(blockchain, delete_index_block_tx)) > 1)
+      {
+        printf("\nCheater Transaction for Block index : %d, transaction %d !\n\n", delete_index_block_tx, delete_index_tx);
+        cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
+      }
+      else
+      {
+        printf("\nCheater Block : Block index : %d!\n", delete_index_block_tx);
+        cheater_deleteBlock(blockchain, delete_index_block_tx);
+      }
+
+      //printf("Compteur fini \n");
+      t = clock() - t;
+      double time_taken = ((double)t) / CLOCKS_PER_SEC; // calculate the elapsed time
+      printf("The cheater took %f seconds to execute\n\n", time_taken);
     }
+
     /* on termine le programme si on a atteint la limite de block pour la blockchain */
     if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK || stop_running)
     {
@@ -243,18 +301,45 @@ int main()
     /* on utilise les cheaters, s´il sont activé et selon leur fréquences d´activation */
     if (CHEATER_BLOCK && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
     {
-      puts("\nCheater Block !\n");
-      unsigned int delete_index_block = (unsigned int)(rand() % blockchain_size(blockchain));
-      cheater_deleteBlock(blockchain, delete_index_block);
-    }
-    if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
-    {
-      puts("\nCheater Block !\n");
-      unsigned int delete_index_block_tx = (unsigned int)(rand() % blockchain_size(blockchain));
-      unsigned int delete_index_tx = (unsigned int)(rand() % block_tx_count(get_block(blockchain, delete_index_block_tx)));
-      cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
-    }
+      clock_t t;
+      t = clock();
+      //printf("Compteur demarre\n");
 
+      unsigned int delete_index_block = (unsigned int)(rand() % blockchain_size(blockchain));
+      delete_index_block = !delete_index_block ? 1 : delete_index_block;
+      printf("\nCheater Block for Block index : %d !\n", delete_index_block);
+      cheater_deleteBlock(blockchain, delete_index_block);
+
+      //printf("Compteur fini \n");
+      t = clock() - t;
+      double time_taken = ((double)t) / CLOCKS_PER_SEC; // calculate the elapsed time
+      printf("The cheater took %f seconds to execute\n\n", time_taken);
+    }
+    else if (CHEATER_TRANSACTION && !(rand() % (int)(1 / CHEATER_FREQUENCY)))
+    {
+      clock_t t;
+      t = clock();
+      //printf("Compteur demarre\n");
+
+      unsigned int delete_index_block_tx = (unsigned int)(rand() % blockchain_size(blockchain));
+      delete_index_block_tx = !delete_index_block_tx ? 1 : delete_index_block_tx;
+      unsigned int delete_index_tx = (unsigned int)(rand() % block_tx_count(get_block(blockchain, delete_index_block_tx)));
+      if (block_tx_count(get_block(blockchain, delete_index_block_tx)) > 1)
+      {
+        printf("\nCheater Transaction for Block index : %d, transaction %d !\n\n", delete_index_block_tx, delete_index_tx);
+        cheater_deleteTransaction(blockchain, delete_index_block_tx, delete_index_tx);
+      }
+      else
+      {
+        printf("\nCheater Block : Block index : %d!\n", delete_index_block_tx);
+        cheater_deleteBlock(blockchain, delete_index_block_tx);
+      }
+
+      //printf("Compteur fini \n");
+      t = clock() - t;
+      double time_taken = ((double)t) / CLOCKS_PER_SEC; // calculate the elapsed time
+      printf("The cheater took %f seconds to execute\n\n", time_taken);
+    }
     /* on termine le programme si on a atteint la limite de block pour la blockchain */
     if (blockchain_size(blockchain) == (unsigned int)MAX_BLOCK || stop_running)
     {
@@ -269,7 +354,9 @@ end_execution:
   if (is_valid_chain(blockchain) && is_valid_chain_merkleTree(blockchain))
   {
     blockchain_dump(stdout, blockchain);
+    puts("\n\n BLOCKCHAIN VERIFIÉE \n\n");
   }
+  // blockchain_dump(stdout, blockchain);
 
   return 0;
 }
